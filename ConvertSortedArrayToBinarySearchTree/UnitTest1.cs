@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Xunit;
 
 namespace ConvertSortedArrayToBinarySearchTree
@@ -32,8 +33,37 @@ namespace ConvertSortedArrayToBinarySearchTree
   {
     public TreeNode SortedArrayToBST(int[] nums)
     {
-      return null;
+      TreeNode root = new TreeNode(nums[0]);
+      return root;
     }
+  }
+
+  public class BinaryTreeHelper
+  {
+    public int?[] TreeToArray(TreeNode root)
+    {
+      List<int?> list = new List<int?>();
+      AddToList(root, list);
+      return list.ToArray();
+    }
+    private void AddToList(TreeNode node, List<int?> list)
+    {
+      if (node == null) return;
+      AddToList(node.left, list);
+      list.Add(node.val);
+      AddToList(node.right, list);
+    }
+
+    //int[size] array = new int[size]; 
+    //int index = 0; 
+    //void storeInOrder(node root)
+    //{
+    //  if (node == null) return;
+    //  storeInOrder(root.leftChild());
+    //  array[index++] = root.value;
+    //  storeInOrder(root.rightChild());
+    //}
+
   }
 
   public class UnitTest1
@@ -41,7 +71,17 @@ namespace ConvertSortedArrayToBinarySearchTree
     [Fact]
     public void Test1()
     {
-
+      var tree = new Solution().SortedArrayToBST(new[] { 1 });
+      var array = new BinaryTreeHelper().TreeToArray(tree);
+      Assert.Equal(array, new int?[] { 1 });
     }
+    [Fact]
+    public void Test2()
+    {
+      var tree = new Solution().SortedArrayToBST(new[] { 1 });
+      var array = new BinaryTreeHelper().TreeToArray(tree);
+      Assert.Equal(array, new int?[] { 1 });
+    }
+
   }
 }
