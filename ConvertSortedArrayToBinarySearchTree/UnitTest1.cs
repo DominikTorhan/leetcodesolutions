@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using Xunit;
 
@@ -20,6 +19,20 @@ namespace ConvertSortedArrayToBinarySearchTree
   //   /   /
   // -10  5
 
+  //0 1 2
+  // 1
+  //0 2
+
+  //01234
+  //   2
+  // 1   4
+  //0   3
+
+  //0 1 2 3 4 5 6
+  //   3 
+  // 1   5
+  //0 2 4 6
+
 
   public class TreeNode
   {
@@ -33,9 +46,51 @@ namespace ConvertSortedArrayToBinarySearchTree
   {
     public TreeNode SortedArrayToBST(int[] nums)
     {
-      TreeNode root = new TreeNode(nums[0]);
+      if (nums == null) return null;
+      if (nums.Length == 0) return null;
+      int middle = nums.Length / 2;
+      TreeNode root = new TreeNode(nums[middle]);
+      int[] left, right;
+      DivideArray(nums, out left, out right);
+      Recursive(root, left, right);
       return root;
     }
+
+    private void DivideArray(int[] array, out int[] left, out int[] right)
+    {
+      int i;
+      int countLeft = array.Length / 2;
+      int countRight = array.Length / 2;
+      if (array.Length % 2 == 0) countRight--;
+      left = new int[countLeft];
+      right = new int[countRight];
+      for (i = 0; i < countLeft; i++)
+      {
+        left[i] = array[i];
+      }
+      for (i = 0; i < countRight; i++)
+      {
+        right[countRight - 1 - i] = array[array.Length - 1 - i];
+      }
+    }
+    private int GetMiddleValue(int[] nums)
+    {
+      return nums[nums.Length / 2];
+    }
+
+    private void Recursive(TreeNode root, int[] numsLeft, int[] numsRight)
+    {
+      int[] left, right;
+      if (numsLeft.Length == 0) return;
+      root.left = new TreeNode(GetMiddleValue(numsLeft));
+      DivideArray(numsLeft, out left, out right);
+      Recursive(root.left, left, right);
+      if (numsRight.Length == 0) return;
+      root.right = new TreeNode(GetMiddleValue(numsRight));
+      DivideArray(numsRight, out left, out right);
+      Recursive(root.right, left, right);
+    }
+
   }
 
   public class BinaryTreeHelper
@@ -78,9 +133,16 @@ namespace ConvertSortedArrayToBinarySearchTree
     [Fact]
     public void Test2()
     {
-      var tree = new Solution().SortedArrayToBST(new[] { 1 });
+      var tree = new Solution().SortedArrayToBST(new[] { 0, 1, 2 });
       var array = new BinaryTreeHelper().TreeToArray(tree);
-      Assert.Equal(array, new int?[] { 1 });
+      Assert.Equal(array, new int?[] { 0, 1, 2 });
+    }
+    [Fact]
+    public void Test3()
+    {
+      var tree = new Solution().SortedArrayToBST(new[] { 0, 1, 2, 3, 4, 5, 6 });
+      var array = new BinaryTreeHelper().TreeToArray(tree);
+      Assert.Equal(array, new int?[] { 0, 1, 2, 3, 4, 5, 6 });
     }
 
   }
