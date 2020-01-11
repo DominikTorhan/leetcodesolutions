@@ -62,10 +62,6 @@ namespace Permutations
         list.Add(nums.ToList());
         return;
       }
-      //123
-      //132
-
-      //321
       for (int i = idx; i<nums.Length; i++)
       {
         tmp = nums[i];
